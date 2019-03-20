@@ -17,7 +17,7 @@
     "variables": {},
     "resources": [
         {
-            "apiVersion": "2018-10-01",
+            "apiVersion": "2018-11-01",
             "type": "Microsoft.Network/virtualNetworks",
             "name": "production-vnet",
             "location": "[parameters('location')]",
@@ -28,9 +28,9 @@
                     ]
                 }
             },
-            "resources": [
+            "subnets": [
                 {
-                    "apiVersion": "2018-10-01",
+                    "apiVersion": "2018-11-01",
                     "type": "subnets",
                     "location": "[parameters('location')]",
                     "name": "web",
@@ -42,7 +42,7 @@
                     }
                 },
                 {
-                    "apiVersion": "2018-10-01",
+                    "apiVersion": "2018-11-01",
                     "type": "subnets",
                     "location": "[parameters('location')]",
                     "name": "database",
@@ -54,7 +54,7 @@
                     }
                 },
                 {
-                    "apiVersion": "2018-10-01",
+                    "apiVersion": "2018-11-01",
                     "type": "subnets",
                     "location": "[parameters('location')]",
                     "name": "management",
