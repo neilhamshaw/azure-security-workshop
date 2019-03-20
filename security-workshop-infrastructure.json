@@ -1,0 +1,72 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "metadata": {
+        "comments": "This template was developed for the MTC Azure Security Workshop.",
+        "author": "Neil Hamshaw, Microsoft UK Limited."
+    },
+    "parameters": {
+        "location": {
+            "type": "string",
+            "defaultValue": "[resourceGroup().location]",
+            "metadata": {
+                "description": "Location for all workshop resources."
+            }
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "apiVersion": "2018-10-01",
+            "type": "Microsoft.Network/virtualNetworks",
+            "name": "production-vnet",
+            "location": "[parameters('location')]",
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "10.0.0.0/16"
+                    ]
+                }
+            },
+            "resources": [
+                {
+                    "apiVersion": "2018-10-01",
+                    "type": "subnets",
+                    "location": "[parameters('location')]",
+                    "name": "web",
+                    "dependsOn": [
+                        "production-vnet"
+                    ],
+                    "properties": {
+                        "addressPrefix": "10.0.1.0/24"
+                    }
+                },
+                {
+                    "apiVersion": "2018-10-01",
+                    "type": "subnets",
+                    "location": "[parameters('location')]",
+                    "name": "database",
+                    "dependsOn": [
+                        "production-vnet"
+                    ],
+                    "properties": {
+                        "addressPrefix": "10.0.2.0/24"
+                    }
+                },
+                {
+                    "apiVersion": "2018-10-01",
+                    "type": "subnets",
+                    "location": "[parameters('location')]",
+                    "name": "management",
+                    "dependsOn": [
+                        "production-vnet"
+                    ],
+                    "properties": {
+                        "addressPrefix": "10.0.0.128/25"
+                    }
+                }
+            ]
+        }
+    ],
+    "outputs": {}
+}
