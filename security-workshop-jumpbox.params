@@ -1,0 +1,57 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "value": "uksouth"
+        },
+        "networkInterfaceName": {
+            "value": "JumpBox-NIC"
+        },
+        "subnetName": {
+            "value": "management"
+        },
+        "virtualNetworkId": {
+            "value": "/subscriptions/a7732e63-30c3-4f95-b753-29a1d38bbc8c/resourceGroups/azure-security-workshop/providers/Microsoft.Network/virtualNetworks/production-vnet"
+        },
+        "publicIpAddressName": {
+            "value": "JumpBox-IP"
+        },
+        "publicIpAddressType": {
+            "value": "Dynamic"
+        },
+        "publicIpAddressSku": {
+            "value": "Basic"
+        },
+        "virtualMachineName": {
+            "value": "JumpBox"
+        },
+        "osDiskType": {
+            "value": "StandardSSD_LRS"
+        },
+        "virtualMachineSize": {
+            "value": "Standard_B1ms"
+        },
+        "adminUsername": {
+            "value": "remoteadmin"
+        },
+        "adminPassword": {
+            "value": null
+        },
+        "autoShutdownStatus": {
+            "value": "Enabled"
+        },
+        "autoShutdownTime": {
+            "value": "18:30"
+        },
+        "autoShutdownTimeZone": {
+            "value": "UTC"
+        },
+        "autoShutdownNotificationStatus": {
+            "value": "Disabled"
+        },
+        "autoShutdownNotificationLocale": {
+            "value": "en"
+        }
+    }
+}

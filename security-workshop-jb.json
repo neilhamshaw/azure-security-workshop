@@ -1,0 +1,128 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "type": "String"
+        }
+    },
+    "variables": {
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Network/networkInterfaces",
+            "name": "JumpBox-NIC",
+            "apiVersion": "2018-10-01",
+            "location": "[parameters('location')]",
+            "tags": {},
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "PublicIPConfiguration",
+                        "properties": {
+                            "subnet": {
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', 'production-vnet', 'management')]"
+                            },
+                            "privateIPAllocationMethod": "Dynamic",
+                            "publicIpAddress": {
+                                "id": "[resourceId(resourceGroup().name, 'Microsoft.Network/publicIpAddresses', 'JumpBox-IP')]"
+                            }
+                        }
+                    }
+                ]
+            },
+            "dependsOn": [
+                "[concat('Microsoft.Network/publicIpAddresses/', 'JumpBox-IP')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Network/publicIpAddresses",
+            "sku": {
+                "name": "Basic"
+            },
+            "name": "JumpBox-IP",
+            "apiVersion": "2018-08-01",
+            "location": "[parameters('location')]",
+            "tags": {},
+            "properties": {
+                "publicIpAllocationMethod": "Dynamic"
+            }
+        },
+        {
+            "type": "Microsoft.Compute/virtualMachines",
+            "name": "JumpBox",
+            "apiVersion": "2018-06-01",
+            "location": "[parameters('location')]",
+            "tags": {},
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "Standard_B1ms"
+                },
+                "storageProfile": {
+                    "osDisk": {
+                        "createOption": "fromImage",
+                        "managedDisk": {
+                            "storageAccountType": "StandardSSD_LRS"
+                        },
+                        "name": "JumpBox-OSDisk"
+                    },
+                    "imageReference": {
+                        "publisher": "MicrosoftWindowsServer",
+                        "offer": "WindowsServer",
+                        "sku": "2016-Datacenter",
+                        "version": "latest"
+                    }
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', 'JumpBox-NIC')]"
+                        }
+                    ]
+                },
+                "osProfile": {
+                    "computerName": "JumpBox",
+                    "adminUsername": "remoteadmin",
+                    "adminPassword": "P4ssw0rd123",
+                    "windowsConfiguration": {
+                        "enableAutomaticUpdates": true,
+                        "provisionVmAgent": true
+                    }
+                }
+            },
+            "dependsOn": [
+                "[concat('Microsoft.Network/networkInterfaces/', 'JumpBox-NIC')]"
+            ]
+        },
+        {
+            "type": "Microsoft.DevTestLab/schedules",
+            "name": "[concat('shutdown-computevm-', 'JumpBox')]",
+            "apiVersion": "2017-04-26-preview",
+            "location": "[parameters('location')]",
+            "tags": {},
+            "properties": {
+                "status": "Disabled",
+                "taskType": "ComputeVmShutdownTask",
+                "dailyRecurrence": {
+                    "time": "18:30"
+                },
+                "timeZoneId": "UTC",
+                "targetResourceId": "[resourceId('Microsoft.Compute/virtualMachines', 'JumpBox')]",
+                "notificationSettings": {
+                    "status": "Disabled",
+                    "notificationLocale": "en",
+                    "timeInMinutes": "30"
+                }
+            },
+            "dependsOn": [
+                "[concat('Microsoft.Compute/virtualMachines/', 'JumpBox')]"
+            ]
+        }
+    ],
+    "outputs": {
+        "adminUsername": {
+            "type": "String",
+            "value": "remoteadmin"
+        }
+    }
+}
