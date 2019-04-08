@@ -70,3 +70,9 @@ To configure Cloud Shell
 
 ### 5. Deploy the base architecture
 
+az group deployment create --resource-group azure-security-workshop --name JB-Deployment --template-file security-workshop-jb.json --parameters '{"location": { "value": "uksouth" } }'
+
+az group deployment create --resource-group azure-security-workshop --name Lab-Deployment --template-file security-workshop-template.json
+
+Some notes about the template:
+- Parameter defaults
