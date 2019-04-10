@@ -231,7 +231,7 @@
                 },
                 "osProfile": {
                     "computerName": "WebServer-01",
-                    "adminUsername": "remoteadmin",
+                    "adminUsername": "webadmin",
                     "adminPassword": "P4ssw0rd123",
                     "windowsConfiguration": {
                         "enableAutomaticUpdates": true,
@@ -285,12 +285,158 @@
             "dependsOn": [
                 "[concat('Microsoft.Compute/virtualMachines/', 'WebServer-01')]"
             ]
+        },
+        {
+            "type": "Microsoft.Network/networkInterfaces",
+            "name": "SQLServer-NIC",
+            "apiVersion": "2018-10-01",
+            "location": "[parameters('location')]",
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "PrivateIPConfiguration",
+                        "properties": {
+                            "subnet": {
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', 'production-vnet', 'database')]"
+                            },
+                            "privateIPAllocationMethod": "Dynamic"
+                        }
+                    }
+                ]
+            }
+        },
+        { 
+            "type": "Microsoft.Compute/virtualMachines",
+            "name": "SQLServer",
+            "apiVersion": "2018-06-01",
+            "location": "[parameters('location')]",
+            "properties": {
+                "osProfile": {
+                    "computerName": "SQLServer",
+                    "adminUsername": "sqladmin",
+                    "adminPassword": "P4ssw0rd1234",
+                    "windowsConfiguration": {
+                        "provisionVmAgent": "true"
+                    }
+                },
+                "hardwareProfile": {
+                    "vmSize": "Standard_D2s_v3"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "MicrosoftSQLServer",
+                        "offer": "SQL2017-WS2016",
+                        "sku": "Enterprise",
+                        "version": "latest"
+                    },
+                    "osDisk": {
+                        "name": "SQLServer-OSDisk",
+                        "createOption": "FromImage",
+                        "managedDisk": {
+                            "storageAccountType": "StandardSSD_LRS"
+                        }
+                    },
+                    "dataDisks": [
+                        {
+                            "createOption": "Empty",
+                            "lun": 0,
+                            "diskSizeGB": "1023",
+                            "caching": "ReadOnly",
+                            "managedDisk": {
+                                "storageAccountType": "StandardSSD_LRS"
+                            },
+                            "name": "SQLServer-DataDisk"
+                        }
+                    ]
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', 'SQLServer-NIC')]"
+                        }
+                    ]
+                }
+            },
+            "dependsOn": [
+                "[concat('Microsoft.Network/networkInterfaces/', 'SQLServer-NIC')]"
+            ]
+        },
+        {
+            "name": "SQLServer",
+            "type": "Microsoft.SqlVirtualMachine/SqlVirtualMachines",
+            "apiVersion": "2017-03-01-preview",
+            "location": "[parameters('location')]",
+            "properties": {
+                "virtualMachineResourceId": "[resourceId('Microsoft.Compute/virtualMachines', 'SQLServer')]",
+                "AutoPatchingSettings": {
+                    "Enable": true,
+                    "DayOfWeek": "Sunday",
+                    "MaintenanceWindowStartingHour": "2",
+                    "MaintenanceWindowDuration": "60"
+                },
+                "KeyVaultCredentialSettings": {
+                    "Enable": false,
+                    "CredentialName": ""
+                },
+                "ServerConfigurationsManagementSettings": {
+                    "SQLConnectivityUpdateSettings": {
+                        "ConnectivityType": "Private",
+                        "Port": "1433",
+                        "SQLAuthUpdateUserName": "",
+                        "SQLAuthUpdatePassword": ""
+                    },
+                    "SQLWorkloadTypeUpdateSettings": {
+                        "SQLWorkloadType": "GENERAL"
+                    },
+                    "SQLStorageUpdateSettings": {
+                        "DiskCount": "1",
+                        "DiskConfigurationType": "NEW",
+                        "StartingDeviceID": "2"
+                    },
+                    "AdditionalFeaturesServerConfigurations": {
+                        "IsRServicesEnabled": "false"
+                    }
+                }
+            },
+            "dependsOn": [
+                "[concat('Microsoft.Compute/virtualMachines/', 'SQLServer')]"
+            ]
+        },
+        {
+            "type": "Microsoft.DevTestLab/schedules",
+            "name": "[concat('shutdown-computevm-', 'SQLServer')]",
+            "apiVersion": "2017-04-26-preview",
+            "location": "[parameters('location')]",
+            "properties": {
+                "status": "Enabled",
+                "taskType": "ComputeVmShutdownTask",
+                "dailyRecurrence": {
+                    "time": "18:30"
+                },
+                "timeZoneId": "UTC",
+                "targetResourceId": "[resourceId('Microsoft.Compute/virtualMachines', 'SQLServer')]",
+                "notificationSettings": {
+                    "status": "Disabled",
+                    "timeInMinutes": "30"
+                }
+            },
+            "dependsOn": [
+                "[concat('Microsoft.Compute/virtualMachines/', 'SQLServer')]"
+            ]
         }
     ],
     "outputs": {
-        "adminUsername": {
+        "JumpBoxAdminUsername": {
             "type": "String",
             "value": "remoteadmin"
+        },
+        "JumpBoxAdminUsername": {
+            "type": "String",
+            "value": "webadmin"
+        },
+        "SQLAdminUsername": {
+            "type": "string",
+            "value": "sqladmin"
         }
     }
 }
