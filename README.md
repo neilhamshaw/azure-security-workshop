@@ -81,9 +81,8 @@ Run the following command to create a Resource Group, providing your own Resourc
 
 Parameters:
 
-**--location**: westeurope
-
-**--name**: your own Resource Group name
+- **--location**: westeurope
+- **--name**: your own Resource Group name
 
 ```
 az group create --location <location> --name <resource-group-name>
