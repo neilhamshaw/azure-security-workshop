@@ -106,10 +106,10 @@ The output from the command will appear similar to this...
 
 #### 5.2 Deploy the template into the Resource Group
 
-The template for the initial deployment is the [security-workshop-template.json](security-workshop-template.json) file, and can be deployed by running the command below, which creates a Resource Group deployment in the West Europe Azure region. **Please note** the link to the 'raw' version of the file on the repository as the value for the **template-uri** parameter, which is the pure text version of the file.
+The template for the initial deployment is the [security-workshop-template.json](/templates/security-workshop-template.json) file, and can be deployed by running the command below, which creates a Resource Group deployment in the West Europe Azure region. **Please note** the link to the 'raw' version of the file on the repository as the value for the **template-uri** parameter, which is the pure text version of the file.
 
 ```
-az group deployment create --resource-group <resource-group-name> --name Lab-Deployment --template-uri https://raw.githubusercontent.com/neilhamshaw/azure-security-workshop/master/security-workshop-template.json  --parameters '{"location": { "value": "westeurope" } }'
+az group deployment create --resource-group <resource-group-name> --name Lab-Deployment --template-uri https://raw.githubusercontent.com/neilhamshaw/azure-security-workshop/master/templates/security-workshop-template.json  --parameters '{"location": { "value": "westeurope" } }'
 ```
 
 The deployment typically takes between 10-15 minutes to complete. Progress can be checked from the Azure Portal by clicking on **Resource Groups** on the favourites bar, click the Resource Group created previously to bring up the properties pane for the Resource Group, and under **Settings**, click **Deployments**.
