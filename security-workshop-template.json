@@ -17,8 +17,8 @@
     "variables": {},
     "resources": [
         {
-            "apiVersion": "2018-11-01",
             "type": "Microsoft.Network/virtualNetworks",
+            "apiVersion": "2018-11-01",
             "name": "production-vnet",
             "location": "[parameters('location')]",
             "properties": {
@@ -72,7 +72,8 @@
                 ]
             },
             "dependsOn": [
-                "[concat('Microsoft.Network/publicIpAddresses/', 'JumpBox-IP')]"
+                "[concat('Microsoft.Network/publicIpAddresses/', 'JumpBox-IP')]",
+                "[concat('Microsoft.Network/virtualNetworks/', 'production-vnet')]"
             ]
         },
         {
@@ -123,7 +124,7 @@
                 "osProfile": {
                     "computerName": "JumpBox",
                     "adminUsername": "remoteadmin",
-                    "adminPassword": "P4ssw0rd123",
+                    "adminPassword": "P4ssw0rd#123",
                     "windowsConfiguration": {
                         "enableAutomaticUpdates": true,
                         "provisionVmAgent": true
@@ -181,7 +182,8 @@
                 ]
             },
             "dependsOn": [
-                "[concat('Microsoft.Network/publicIpAddresses/', 'WebServer-01-IP')]"
+                "[concat('Microsoft.Network/publicIpAddresses/', 'WebServer-01-IP')]",
+                "[concat('Microsoft.Network/virtualNetworks/', 'production-vnet')]"
             ]
         },
         {
@@ -232,7 +234,7 @@
                 "osProfile": {
                     "computerName": "WebServer-01",
                     "adminUsername": "webadmin",
-                    "adminPassword": "P4ssw0rd123",
+                    "adminPassword": "P4ssw0rd123*",
                     "windowsConfiguration": {
                         "enableAutomaticUpdates": true,
                         "provisionVmAgent": true
@@ -303,7 +305,10 @@
                         }
                     }
                 ]
-            }
+            },
+            "dependsOn": [
+                "[concat('Microsoft.Network/virtualNetworks/', 'production-vnet')]"
+            ]
         },
         { 
             "type": "Microsoft.Compute/virtualMachines",
@@ -314,7 +319,7 @@
                 "osProfile": {
                     "computerName": "SQLServer",
                     "adminUsername": "sqladmin",
-                    "adminPassword": "P4ssw0rd1234",
+                    "adminPassword": "P4ssw0rd1234#",
                     "windowsConfiguration": {
                         "provisionVmAgent": "true"
                     }
