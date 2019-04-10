@@ -68,11 +68,54 @@ To configure Cloud Shell
 
     **WORKSHOP TIP:** Copy and paste the **id** property into a new Notepad window. This is the Subscription ID which will be used in some of the command during the labs.
 
-### 5. Deploy the base architecture
+### 5. Deploy the base architecture (time to complete: 10 to 15 min)
+The resources to build the architecture shown above can be deployed via a script, known as a template. Azure Resource Manager (ARM) Templates are JSON formatted files which describe Azure Infrastructure as code, allowing for consistent and repeatable deployments.
 
-az group deployment create --resource-group azure-security-workshop --name JB-Deployment --template-file security-workshop-jb.json --parameters '{"location": { "value": "uksouth" } }'
+Please refer to [https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-overview#template-deployment](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-overview#template-deployment) for more further reading.
 
-az group deployment create --resource-group azure-security-workshop --name Lab-Deployment --template-file security-workshop-template.json
+#### 5.1 Create the Resource Group
+
+>**VERY IMPORTANT: Use location 'WestEurope' to deploy your infrastructure for all labs. This will guarantee that you won't have issues with the Azure Pass credits and availability of Virtual Machine types.**
+
+Run the following command to create a Resource Group, providing your own Resource Group name for the **--name** parameter. This Resource Group will be used throughout the labs.
+
+Parameters:
+
+**--location**: westeurope
+
+**--name**: your own Resource Group name
+
+```
+az group create --location <location> --name <resource-group-name>
+```
+
+The output from the command will appear similar to this...
+
+```
+{
+  "id": "/subscriptions/a7732e63-30c3-4f95-b753-29a1d38bbc8c/resourceGroups/my-resource-group",
+  "location": "westeurope",
+  "managedBy": null,
+  "name": "my-resource-group",
+  "properties": {
+    "provisioningState": "Succeeded"
+  },
+  "tags": null,
+  "type": null
+}
+```
+
+#### 5.2 Deploy the template into the Resource Group
+
+The template for the initial deployment is the [security-workshop-template.json](security-workshop-template.json) file, and can be deployed by running the command below, which creates a Resource Group deployment in the West Europe Azure region. **Please note** the link to the 'raw' version of the file on the repository as the value for the **template-uri** parameter, which is the pure text version of the file.
+
+```
+az group deployment create --resource-group <resource-group-name> --name Lab-Deployment --template-uri https://raw.githubusercontent.com/neilhamshaw/azure-security-workshop/master/security-workshop-template.json  --parameters '{"location": { "value": "westeurope" } }'
+```
+
+The deployment typically takes between 10-15 minutes to complete. Progress can be checked from the Azure Portal by clicking on **Resource Groups** on the favourites bar, click the Resource Group created previously to bring up the properties pane for the Resource Group, and under **Settings**, click **Deployments**.
+
+This screen highlights the deployments run against the Resource Group, and clicking the **Lab-Deployment** entry will show further information about the deployment, such as the resources created and the current status of each element.
 
 Some notes about the template:
 - Parameter defaults

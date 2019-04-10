@@ -435,7 +435,7 @@
             "type": "String",
             "value": "remoteadmin"
         },
-        "JumpBoxAdminUsername": {
+        "WebAdminUsername": {
             "type": "String",
             "value": "webadmin"
         },
