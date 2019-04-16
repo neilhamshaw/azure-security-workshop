@@ -49,7 +49,7 @@ To configure Cloud Shell
 - The system will tell you that you have no storage configured. Click the **Show advanced settings** link.
 - To configure the storage on the Advanced Settings page:
     
-    - The **Subscription** field should default to your Subscription name. If not, set theis to the required Azure Subscription.
+    - The **Subscription** field should default to your Subscription name. If not, set this to the required Azure Subscription.
     - Set the **Cloud Shell region** to **West Europe**
     - Under **Resource Group**, ensure **Create New** is selected and enter a name for a new Azure Resource Group, which will be a container for the new Storage Account. This can be anything you choose.
     - Set **Storage Account** to **Create New** and enter the name for the Storage Account. **Please note** that Storage Account names must be between 3 and 24 characters long, and contain numbers and lower-case letters only).

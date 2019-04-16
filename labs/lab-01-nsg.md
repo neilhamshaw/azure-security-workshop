@@ -8,17 +8,19 @@ Further information on network security groups (NSG) can be found in the Azure d
 
 [https://docs.microsoft.com/en-us/azure/virtual-network/security-overview](https://docs.microsoft.com/en-us/azure/virtual-network/security-overview)
 
-You can use security groups to protect/restrict traffic between tiers. In the 3-tier architecture shown, the web tier should not communicate directly with any resource in the database tier. To enforce this, the database subnet should block all incoming traffic from the web tier subnet. This can be done using a security group.
+From a security point of view, the infrastructure we have deployed is very open. All traffic can flow between all subnets and all servers with only the Windows Firewall preventing access.
+
+We can use Network Security Groups as a method to protect/restrict traffic between tiers. In the N-tier architecture shown, the web tier should not communicate directly with any resource in the database tier. To enforce this, security needs to be put in place which blocks all but the necessary incoming traffic from the web tier subnet *to* the database subnet. This can be done using a security group.
 
 ### 1.1 - Creating the security group
-This section creates the security group to protect the database tier.
+This section creates the security group and the relevant rules to protect the database tier.
 
-1. In the VS Code terminal, enter the following CLI command to create the security group **SQL-NSG**
+1. In the VS Code terminal, enter the following CLI command to create a security group named **SQL-NSG**
     ```
     az network nsg create --name SQL-NSG --resource-group <resource-group-name> --location <location>
     ```
 
-    When the command completes, the terminal will show all properties of the security group, and you can also see the new NSG in the Azure console.
+    When the command completes, the terminal will output all properties of the security group, and you can also see the new NSG in the Azure console.
 
     By default, a security group will be pre-populated with three **inbound** rules (in order of execution):
     1. allow any VNet to VNet traffic
@@ -35,7 +37,7 @@ This section creates the security group to protect the database tier.
     az network nsg show --resource-group <resource-group-name> --name SQL-NSG --query "defaultSecurityRules[]" --output table
     ```
 
-    These rules cannot be deleted. What we can do is create a new series of rules in the security group with a higher priority to filter the traffic before the default rules are evaluated.
+    These rules cannot be deleted. What we *can* do however, is create a new series of rules in the security group with a **higher priority** (a higher execution order) to filter the traffic before the default rules are evaluated.
 
 2.  Allow inbound traffic from the business tier subnet.
 
@@ -84,11 +86,11 @@ This section creates the security group to protect the database tier.
 #### Rule Priority
 Consider the following when creating security group rules...
 
-- Security group rules run in priority order, with the lowest priority rule being evaluated first.
-- Leave a reasonable gap between your rules. It makes for a lot of work to try and retro-fit a new rule with a higher priority in between rules priorties 4,5 and 6 than 140, 150 and 160.
-- The first **Deny** rule encountered by the evaluation instantly deny the access.
+- Security group rules run in priority order, with the rule given the *lowest* priority number being evaluated *first*.
+- Leave a reasonable gap between your rule numbers. It makes for a lot of work to try and retro-fit a new rule with a higher priority in between rules (for example) numbered 4,5 and 6 than it does with numbers 140, 150 and 160.
+- The first **Deny** rule encountered by the evaluation instantly denies the access.
 
-### 1.2 - Attach the security group to the SQL Server network interface / NIC
+### 1.2 - Attach the security group to the SQL Server network interface Card (NIC)
 
 Follow these steps to attach the new NSG to the network interface of the SQL VM...
 
@@ -111,6 +113,8 @@ Your NSG rule set should look similar to this...
 Confirm that you can RDP from the Jump Box to the SQL server and also from the Business VM but not from the Web VM (you will need to RDP to the Jump Box first, then RDP to the Business and Web VMs to finally RDP to the SQL VM)
 
 ![RDP blocked](/images/RDP-blocked-from-web.PNG)
+
+An earlier test saw you try and ping the SQL server from the Jump Box. If you try this test again, despite the traffic being allowed on the Windows Firewall, the ping test should fail.
 
 << [Back to home page](/README.md)
 
