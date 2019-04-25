@@ -8,9 +8,14 @@ Further information on network security groups (NSG) can be found in the Azure d
 
 [https://docs.microsoft.com/en-us/azure/virtual-network/security-overview](https://docs.microsoft.com/en-us/azure/virtual-network/security-overview)
 
-From a security point of view, the infrastructure we have deployed is very open. All traffic can flow between all subnets and all servers with only the Windows Firewall preventing access.
+The infrastructure we have deployed is wide open for access, from a security point of view. All traffic can flow between all subnets and all servers. For example:
 
-We can use Network Security Groups as a method to protect/restrict traffic between tiers. In the N-tier architecture shown, the web tier should not communicate directly with any resource in the database tier. To enforce this, security needs to be put in place which blocks all but the necessary incoming traffic from the web tier subnet *to* the database subnet. This can be done using a security group.
+- Anybody can remotely access the web server if they know the Public IP address using Remote Desktop tools
+- If a user gained remote access to the web server, they can get remote access to the database server (the user will be able to find the credentials )
+
+The only thing preventing access to the Windows servers is the Windows Firewall.
+
+We can use Network Security Groups as a method to protect/restrict traffic to resources. In the N-tier architecture shown, the web tier should not communicate directly with any resource in the database tier. To enforce this, security needs to be put in place which blocks all but the necessary incoming traffic from the web tier subnet *to* the database subnet. This can be done using a security group.
 
 ### 1.1 - Creating the security group
 This section creates the security group and the relevant rules to protect the database tier.
@@ -94,7 +99,7 @@ Consider the following when creating security group rules...
 
 Follow these steps to attach the new NSG to the network interface of the SQL VM...
 
-![NSG-inbound-sql](/images/attach-NSG-NIC.PNG)
+![NSG-inbound-sql](/images/Lab1-Attach-NSG-NIC.PNG)
 
 Alternatively you can use the following CLI command to make this attachment. The command references the NIC resource and attaches the security group to the NIC.
 
@@ -108,11 +113,11 @@ az network nic update --resource-group <resource-group-name> --name sql-vm1-nic1
 
 Your NSG rule set should look similar to this...
 
-![NSG-inbound-sql](/images/NSG-SQL-NIC.PNG)
+![NSG-inbound-sql](/images/Lab1-NSG-SQL-NIC.PNG)
 
 Confirm that you can RDP from the Jump Box to the SQL server and also from the Business VM but not from the Web VM (you will need to RDP to the Jump Box first, then RDP to the Business and Web VMs to finally RDP to the SQL VM)
 
-![RDP blocked](/images/RDP-blocked-from-web.PNG)
+![RDP blocked](/images/Lab1-RDP-blocked-from-web.PNG)
 
 An earlier test saw you try and ping the SQL server from the Jump Box. If you try this test again, despite the traffic being allowed on the Windows Firewall, the ping test should fail.
 
