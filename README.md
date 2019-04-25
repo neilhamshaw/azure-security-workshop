@@ -75,7 +75,7 @@ Please refer to [https://docs.microsoft.com/en-us/azure/azure-resource-manager/r
 
 #### 5.1 Create the Resource Group
 
->**VERY IMPORTANT: Use location 'WestEurope' to deploy your infrastructure for all labs. This will guarantee that you won't have issues with the Azure Pass credits and availability of Virtual Machine types.**
+**VERY IMPORTANT: Use location 'WestEurope' to deploy your infrastructure for all labs. This will guarantee that you won't have issues with the Azure Pass credits and availability of Virtual Machine types.**
 
 Run the following command to create a Resource Group, providing your own Resource Group name for the **--name** parameter. This Resource Group will be used throughout the labs.
 

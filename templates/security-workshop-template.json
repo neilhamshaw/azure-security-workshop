@@ -142,12 +142,12 @@
             "location": "[parameters('location')]",
             "tags": {},
             "properties": {
-                "status": "Disabled",
+                "status": "Enabled",
                 "taskType": "ComputeVmShutdownTask",
                 "dailyRecurrence": {
                     "time": "18:30"
                 },
-                "timeZoneId": "UTC",
+                "timeZoneId": "GMT Standard Time",
                 "targetResourceId": "[resourceId('Microsoft.Compute/virtualMachines', 'JumpBox')]",
                 "notificationSettings": {
                     "status": "Disabled",
@@ -252,12 +252,12 @@
             "location": "[parameters('location')]",
             "tags": {},
             "properties": {
-                "status": "Disabled",
+                "status": "Enabled",
                 "taskType": "ComputeVmShutdownTask",
                 "dailyRecurrence": {
                     "time": "18:30"
                 },
-                "timeZoneId": "UTC",
+                "timeZoneId": "GMT Standard Time",
                 "targetResourceId": "[resourceId('Microsoft.Compute/virtualMachines', 'WebServer-01')]",
                 "notificationSettings": {
                     "status": "Disabled",
@@ -418,7 +418,7 @@
                 "dailyRecurrence": {
                     "time": "18:30"
                 },
-                "timeZoneId": "UTC",
+                "timeZoneId": "GMT Standard Time",
                 "targetResourceId": "[resourceId('Microsoft.Compute/virtualMachines', 'SQLServer')]",
                 "notificationSettings": {
                     "status": "Disabled",
