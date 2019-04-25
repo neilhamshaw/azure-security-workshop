@@ -17,7 +17,7 @@ The only thing preventing access to the Windows servers is the Windows Firewall.
 
 We can use Network Security Groups as a method to protect/restrict traffic to resources. In the N-tier architecture shown, the web tier should not communicate directly with any resource in the database tier. To enforce this, security needs to be put in place which blocks all but the necessary incoming traffic from the web tier subnet *to* the database subnet. This can be done using a security group.
 
-### 1.1 - Creating the security group
+### 1.2 - Creating the security group
 This section creates the security group and the relevant rules to protect the database tier.
 
 1. In the VS Code terminal, enter the following CLI command to create a security group named **SQL-NSG**
@@ -95,7 +95,7 @@ Consider the following when creating security group rules...
 - Leave a reasonable gap between your rule numbers. It makes for a lot of work to try and retro-fit a new rule with a higher priority in between rules (for example) numbered 4,5 and 6 than it does with numbers 140, 150 and 160.
 - The first **Deny** rule encountered by the evaluation instantly denies the access.
 
-### 1.2 - Attach the security group to the SQL Server network interface Card (NIC)
+### 1.3 - Attach the security group to the SQL Server network interface Card (NIC)
 
 Follow these steps to attach the new NSG to the network interface of the SQL VM...
 
@@ -109,7 +109,7 @@ Alternatively you can use the following CLI command to make this attachment. The
 az network nic update --resource-group <resource-group-name> --name sql-vm1-nic1 --network-security-group SQL-NSG
 ```
 
-### 1.3 - Overview and final steps
+### 1.4 - Overview and final steps
 
 Your NSG rule set should look similar to this...
 
