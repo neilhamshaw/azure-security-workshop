@@ -119,7 +119,7 @@ Deployment progress can be checked from the Azure Portal using the following ste
 
 - Click on **Resource Groups** on the favourites bar
 
-![RGMenuOption](/images/homepage/RGMenuOption.PNG)
+![RGMenuOption](images/homepage/RGMenuOption.PNG)
 
 - Click the Resource Group created previously to bring up the properties pane for the Resource Group. **Note** that this also displays all resources within the Resource Group and once the deployment has completed, will be fully populated with the initial lab resources.
 
