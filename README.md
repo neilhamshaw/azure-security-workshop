@@ -129,7 +129,7 @@ Deployment progress can be checked from the Azure Portal using the following ste
 
   ![RGDeployments](images/homepage/RGDeployments.png)
 
-This screen highlights the deployments run against the Resource Group, and clicking the **Lab-Deployment** entry will show further information about the deployment, such as the resources created and the current status of each element.
+  This screen highlights the deployments run against the Resource Group, and clicking the **Lab-Deployment** entry will show further information about the deployment, such as the resources created and the current status of each element.
 
 Some notes about the template:
 - Parameter defaults
