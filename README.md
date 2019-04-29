@@ -112,7 +112,22 @@ The template for the initial deployment is the [security-workshop-template.json]
 az group deployment create --resource-group <resource-group-name> --name Lab-Deployment --template-uri https://raw.githubusercontent.com/neilhamshaw/azure-security-workshop/master/templates/security-workshop-template.json  --parameters '{"location": { "value": "westeurope" } }'
 ```
 
-The deployment typically takes between 10-15 minutes to complete. Progress can be checked from the Azure Portal by clicking on **Resource Groups** on the favourites bar, click the Resource Group created previously to bring up the properties pane for the Resource Group, and under **Settings**, click **Deployments**.
+The deployment typically takes between 10-15 minutes to complete.
+
+#### 5.3 Checking the progress of a deployment
+Deployment progress can be checked from the Azure Portal using the following steps...
+
+- Click on **Resource Groups** on the favourites bar
+
+![RGMenuOption](/images/homepage/RGMenuOption.PNG)
+
+- Click the Resource Group created previously to bring up the properties pane for the Resource Group. **Note** that this also displays all resources within the Resource Group and once the deployment has completed, will be fully populated with the initial lab resources.
+
+![RGResources](/images/homepage/RGResources.PNG)
+
+- Under the **Settings** heading, click **Deployments**.
+
+![RGDeployments](/images/homepage/RGDeployments.PNG)
 
 This screen highlights the deployments run against the Resource Group, and clicking the **Lab-Deployment** entry will show further information about the deployment, such as the resources created and the current status of each element.
 

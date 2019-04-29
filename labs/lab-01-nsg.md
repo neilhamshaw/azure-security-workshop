@@ -99,7 +99,7 @@ Consider the following when creating security group rules...
 
 Follow these steps to attach the new NSG to the network interface of the SQL VM...
 
-![NSG-inbound-sql](/images/Lab1-Attach-NSG-NIC.PNG)
+![NSG-inbound-sql](/images/lab1/Attach-NSG-NIC.PNG)
 
 Alternatively you can use the following CLI command to make this attachment. The command references the NIC resource and attaches the security group to the NIC.
 
@@ -113,11 +113,11 @@ az network nic update --resource-group <resource-group-name> --name sql-vm1-nic1
 
 Your NSG rule set should look similar to this...
 
-![NSG-inbound-sql](/images/Lab1-NSG-SQL-NIC.PNG)
+![NSG-inbound-sql](/images/lab1/NSG-SQL-NIC.PNG)
 
 Confirm that you can RDP from the Jump Box to the SQL server and also from the Business VM but not from the Web VM (you will need to RDP to the Jump Box first, then RDP to the Business and Web VMs to finally RDP to the SQL VM)
 
-![RDP blocked](/images/Lab1-RDP-blocked-from-web.PNG)
+![RDP blocked](/images/lab1/RDP-blocked-from-web.PNG)
 
 An earlier test saw you try and ping the SQL server from the Jump Box. If you try this test again, despite the traffic being allowed on the Windows Firewall, the ping test should fail.
 
