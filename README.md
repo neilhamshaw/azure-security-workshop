@@ -16,7 +16,7 @@ This workshop gets you to hands-on with the Azure platform. To gain the maximum 
 - We would **not** recommend using a personal Subscription for these labs. Any costs charged to your personal credit/debit card are at the users discretion.
 
 ## Conventions and formatting
-When navigating through the labs, please pay close attention to the following conventions and formatting
+When navigating through the workshop, please pay close attention to the following conventions and formatting
 
 ```
 Code examples, or command line output, will appear like this
@@ -153,7 +153,7 @@ Parameters:
 az group deployment create --resource-group <resource-group-name> --name Lab-Deployment --template-uri https://raw.githubusercontent.com/neilhamshaw/azure-security-workshop/master/templates/security-workshop-template.json  --parameters '{"location": { "value": "westeurope" } }'
 ```
 
-The deployment typically takes between 10-15 minutes to complete.
+The deployment typically takes around 15 minutes to complete.
 
 #### 5.3 Checking the progress of a deployment
 Deployment progress can be checked from the Azure Portal using the following steps...
@@ -170,10 +170,11 @@ Deployment progress can be checked from the Azure Portal using the following ste
 
   ![RGDeployments](images/homepage/RGDeployments.png)
 
-  This screen highlights the deployments run against the Resource Group, and clicking the **Lab-Deployment** entry (click on the name itself) will show further information about the deployment, such as the resources created and the current status of each element.
-
+  This screen highlights the deployments running (or which have been previously deployed) against the Resource Group, and clicking the **Lab-Deployment** entry (click on the name itself) will show further information about the deployment, such as the resources created and the current status of each element.
 
   ![RGDeploymentDetails](images/homepage/RGDeploymentDetails.png)
+
+Once deployed, [proceed to the workshop labs](/labs/README.md).
 
 Some notes about the template:
 - Parameter defaults
