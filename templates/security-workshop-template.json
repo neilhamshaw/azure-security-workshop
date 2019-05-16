@@ -160,6 +160,25 @@
             ]
         },
         {
+            "apiVersion": "2018-06-01",
+            "type": "Microsoft.Compute/virtualMachines/extensions",
+            "name": "[concat('JumpBox','/', 'JumpBoxDSC')]",
+            "location": "[parameters('location')]",
+            "properties": {
+                "publisher": "Microsoft.Powershell",
+                "type": "DSC",
+                "typeHandlerVersion": "2.1",
+                "autoUpgradeMinorVersion":true,
+                "settings": {
+                    "ModulesURL": "https://raw.githubusercontent.com/neilhamshaw/azure-security-workshop/master/scripts/enableicmp.ps1.zip",
+                    "configurationFunction": "enableicmp.ps1\\EnableICMP"
+                }
+            },
+            "dependsOn": [
+                "[concat('Microsoft.Compute/virtualMachines/', 'JumpBox')]"
+            ]
+        },
+        {
             "type": "Microsoft.Network/networkInterfaces",
             "name": "WebServer-01-NIC",
             "apiVersion": "2018-10-01",
