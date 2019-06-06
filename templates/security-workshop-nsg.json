@@ -19,22 +19,62 @@
         {
             "apiVersion": "2015-06-15",
             "type": "Microsoft.Network/networkSecurityGroups",
-            "name": "Test-NSG",
+            "name": "Template-NSG",
             "location": "[parameters('location')]",
             "properties": {
                 "securityRules": [
                     {
-                        "name": "first_rule",
+                        "name": "First-Rule",
                         "properties": {
                             "direction": "Inbound",
                             "priority": 123,
-                            "description": "This is the first rule",
+                            "description": "This is the first rule.",
                             "access": "Allow",
                             "protocol": "Tcp",
                             "sourceAddressPrefix": "*",
                             "sourcePortRange": "23-45",
                             "destinationAddressPrefix": "*",
                             "destinationPortRange": "46-56"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "apiVersion": "2015-06-15",
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "name": "JumpBox-NSG",
+            "location": "[parameters('location')]",
+            "properties": {
+            }
+        },
+        {
+            "apiVersion": "2015-06-15",
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "name": "BizServer-NSG",
+            "location": "[parameters('location')]",
+            "properties": {
+            }
+        },
+        {
+            "apiVersion": "2015-06-15",
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "name": "SQLServer-NSG",
+            "location": "[parameters('location')]",
+            "properties": {
+                "securityRules": [
+                    {
+                        "name": "Allow-SQL",
+                        "properties": {
+                            "direction": "Inbound",
+                            "priority": 100,
+                            "description": "Allow SQL traffic within Virtual Network.",
+                            "access": "Allow",
+                            "protocol": "Tcp",
+                            "sourceAddressPrefix": "VirtualNetwork",
+                            "sourcePortRange": "*",
+                            "destinationAddressPrefix": "*",
+                            "destinationPortRange": "1433"
                         }
                     }
                 ]
