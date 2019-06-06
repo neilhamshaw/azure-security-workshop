@@ -1,0 +1,45 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "metadata": {
+        "comments": "This NSG template was developed for the MTC Azure Security Workshop.",
+        "author": "Neil Hamshaw, Microsoft UK Limited."
+    },
+    "parameters": {
+        "location": {
+            "type": "string",
+            "defaultValue": "[resourceGroup().location]",
+            "metadata": {
+                "description": "Location for all workshop resources."
+            }
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "apiVersion": "2015-06-15",
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "name": "Test-NSG",
+            "location": "[parameters('location')]",
+            "properties": {
+                "securityRules": [
+                    {
+                        "name": "first_rule",
+                        "properties": {
+                            "direction": "Inbound",
+                            "priority": 123,
+                            "description": "This is the first rule",
+                            "access": "Allow",
+                            "protocol": "Tcp",
+                            "sourceAddressPrefix": "*",
+                            "sourcePortRange": "23-45",
+                            "destinationAddressPrefix": "*",
+                            "destinationPortRange": "46-56"
+                        }
+                    }
+                ]
+            }
+        }
+    ],
+    "outputs": {}
+}
