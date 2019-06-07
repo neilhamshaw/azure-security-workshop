@@ -4,14 +4,16 @@
     "parameters": {
       "existingVirtualNetworkName": {
         "type": "string",
+        "defaultValue": "production-vnet",
         "metadata": {
-          "description": "Name of the existing VNET"
+          "description": "Name of an existing Virtual Network"
         }
       },
       "subnetName": {
         "type": "string",
+        "defaultValue": "AppGatewaySubnet",
         "metadata": {
-          "description": "Name of the subnet in the virtual network you want to use"
+          "description": "Name of the App Gateway subnet in the Virtual Network you want to use"
         }
       },
       "applicationGatewaySize": {
