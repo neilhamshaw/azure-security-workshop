@@ -46,21 +46,21 @@
           "description": "Number of instances"
         }
       },
-      "backendIpAddress1": {
+      "BackendIPAddress1": {
           "type": "string",
           "defaultValue": "10.0.1.5",
           "metadata": {
             "description": "IP Address for Backend Server 1"
           }
         },
-      "wafEnabled": {
+      "WAFEnabled": {
         "type": "bool",
         "defaultValue": true,
         "metadata": {
           "description": "WAF Enabled"
         }
       },
-      "wafMode": {
+      "WAFMode": {
         "type": "string",
         "allowedValues": [
           "Detection",
@@ -71,7 +71,7 @@
           "description": "WAF Mode"
         }
       },
-      "wafRuleSetType": {
+      "WAFRuleSetType": {
         "type": "string",
         "allowedValues": [
           "OWASP"
@@ -81,7 +81,7 @@
           "description": "WAF Rule Set Type"
         }
       },
-      "wafRuleSetVersion": {
+      "WAFRuleSetVersion": {
         "type": "string",
         "allowedValues": [
           "2.2.9",
@@ -101,7 +101,7 @@
       }
     },
     "variables": {
-       "publicIPAddressName": "AppGWpip",
+      "publicIPAddressName": "AppGWpip",
       "applicationGatewayName": "AppGWmtc",
       "subnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('existingVirtualNetworkName'),  parameters('subnetName'))]",
       "publicIPRef": "[resourceId('Microsoft.Network/publicIPAddresses', variables('publicIPAddressName'))]",
@@ -162,7 +162,7 @@
               "properties": {
                 "BackendAddresses": [
                   {
-                    "IpAddress": "[parameters('backendIpAddress1')]"
+                    "IpAddress": "[parameters('BackendIPAddress1')]"
                   }
                  
                 ]
@@ -212,10 +212,10 @@
             }
           ],
           "webApplicationFirewallConfiguration": {
-            "enabled": "[parameters('wafEnabled')]",
-            "firewallMode": "[parameters('wafMode')]",
-            "ruleSetType": "[parameters('wafRuleSetType')]",
-            "ruleSetVersion": "[parameters('wafRuleSetVersion')]",
+            "enabled": "[parameters('WAFEnabled')]",
+            "firewallMode": "[parameters('WAFMode')]",
+            "ruleSetType": "[parameters('WAFRuleSetType')]",
+            "ruleSetVersion": "[parameters('WAFRuleSetVersion')]",
             "disabledRuleGroups": []
           }
         },
