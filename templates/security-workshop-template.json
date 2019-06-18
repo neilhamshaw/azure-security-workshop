@@ -311,8 +311,8 @@
                 "typeHandlerVersion": "2.1",
                 "autoUpgradeMinorVersion":true,
                 "settings": {
-                    "ModulesURL": "https://raw.githubusercontent.com/neilhamshaw/azure-security-workshop/master/resources/iisaspnet.ps1.zip",
-                    "configurationFunction": "iisaspnet.ps1\\iisaspnet"
+                    "ModulesURL": "https://raw.githubusercontent.com/neilhamshaw/azure-security-workshop/master/resources/dsc-iis-website.ps1.zip",
+                    "configurationFunction": "dsc-iis-website.ps1\\IIS-WebServerConfig"
                 }
             },
             "dependsOn": [
