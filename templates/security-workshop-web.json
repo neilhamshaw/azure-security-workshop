@@ -133,7 +133,7 @@
                 "typeHandlerVersion": "2.1",
                 "autoUpgradeMinorVersion":true,
                 "settings": {
-                    "ModulesURL": "https://raw.githubusercontent.com/mspnp/reference-architectures/master/scripts/windows/dsc/iisaspnet.ps1.zip",
+                    "ModulesURL": "https://raw.githubusercontent.com/mspnp/reference-architectures/master/resources/windows/dsc/iisaspnet.ps1.zip",
                     "configurationFunction": "iisaspnet.ps1\\iisaspnet"
                 }
             },

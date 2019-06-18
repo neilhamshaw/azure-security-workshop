@@ -1,7 +1,0 @@
-URLs with information about Powershell DSC...
-
-Azure Reference Architecture: https://github.com/mspnp/reference-architectures/blob/master/scripts/windows/dsc/PrepareSQLServer.ps1
-Powershell for Windows Firewall: https://blogs.technet.microsoft.com/rmilne/2018/01/26/unable-to-ping-windows-server/
-Windows DCS: https://docs.microsoft.com/en-gb/powershell/dsc/overview/overview
-Powershell Gallery: https://www.powershellgallery.com
-Install DSC Resources: https://docs.microsoft.com/en-us/powershell/dsc/configurations/install-additional-dsc-resources
