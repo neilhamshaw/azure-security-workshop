@@ -53,7 +53,7 @@
                         }
                     },
                     {
-                        "name": "management",
+                        "name": "Management",
                         "properties": {
                             "addressPrefix": "10.0.0.128/25"
                         }
@@ -64,7 +64,7 @@
         {
             "type": "Microsoft.Network/networkInterfaces",
             "name": "JumpBox-NIC",
-            "apiVersion": "2018-10-01",
+            "apiVersion": "2019-04-01",
             "location": "[parameters('location')]",
             "tags": {},
             "properties": {
@@ -73,38 +73,38 @@
                         "name": "PublicIPConfiguration",
                         "properties": {
                             "subnet": {
-                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', 'production-vnet', 'management')]"
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', 'production-vnet', 'Management')]"
                             },
                             "privateIPAllocationMethod": "Dynamic",
-                            "publicIpAddress": {
-                                "id": "[resourceId(resourceGroup().name, 'Microsoft.Network/publicIpAddresses', 'JumpBox-IP')]"
+                            "publicIPAddress": {
+                                "id": "[resourceId(resourceGroup().name, 'Microsoft.Network/publicIPAddresses', 'JumpBox-IP')]"
                             }
                         }
                     }
                 ]
             },
             "dependsOn": [
-                "[concat('Microsoft.Network/publicIpAddresses/', 'JumpBox-IP')]",
+                "[concat('Microsoft.Network/publicIPAddresses/', 'JumpBox-IP')]",
                 "[concat('Microsoft.Network/virtualNetworks/', 'production-vnet')]"
             ]
         },
         {
-            "type": "Microsoft.Network/publicIpAddresses",
+            "type": "Microsoft.Network/publicIPAddresses",
+            "name": "JumpBox-IP",
+            "apiVersion": "2019-04-01",
+            "location": "[parameters('location')]",
+            "tags": {},
             "sku": {
                 "name": "Basic"
             },
-            "name": "JumpBox-IP",
-            "apiVersion": "2018-08-01",
-            "location": "[parameters('location')]",
-            "tags": {},
             "properties": {
-                "publicIpAllocationMethod": "Dynamic"
+                "publicIPAllocationMethod": "Dynamic"
             }
         },
         {
             "type": "Microsoft.Compute/virtualMachines",
             "name": "JumpBox",
-            "apiVersion": "2018-06-01",
+            "apiVersion": "2018-10-01",
             "location": "[parameters('location')]",
             "tags": {},
             "properties": {
@@ -113,7 +113,7 @@
                 },
                 "storageProfile": {
                     "osDisk": {
-                        "createOption": "fromImage",
+                        "createOption": "FromImage",
                         "managedDisk": {
                             "storageAccountType": "StandardSSD_LRS"
                         },
@@ -150,7 +150,7 @@
         {
             "type": "Microsoft.DevTestLab/schedules",
             "name": "[concat('shutdown-computevm-', 'JumpBox')]",
-            "apiVersion": "2017-04-26-preview",
+            "apiVersion": "2018-09-15",
             "location": "[parameters('location')]",
             "tags": {},
             "properties": {
@@ -172,18 +172,22 @@
             ]
         },
         {
-            "apiVersion": "2018-06-01",
             "type": "Microsoft.Compute/virtualMachines/extensions",
+            "apiVersion": "2019-03-01",
             "name": "[concat('JumpBox','/', 'JumpBoxDSC')]",
             "location": "[parameters('location')]",
             "properties": {
                 "publisher": "Microsoft.Powershell",
                 "type": "DSC",
-                "typeHandlerVersion": "2.1",
+                "typeHandlerVersion": "2.77",
                 "autoUpgradeMinorVersion":true,
                 "settings": {
-                    "ModulesURL": "https://raw.githubusercontent.com/neilhamshaw/azure-security-workshop/master/resources/enableicmp.ps1.zip",
-                    "configurationFunction": "enableicmp.ps1\\EnableICMP"
+                    "wmfVersion": "latest",
+                    "configuration": {
+                        "url": "https://raw.githubusercontent.com/neilhamshaw/azure-security-workshop/master/resources/enableicmp.ps1.zip",
+                        "script": "enableicmp.ps1",
+                        "function": "EnableICMP"
+                    }
                 }
             },
             "dependsOn": [
@@ -193,7 +197,7 @@
         {
             "type": "Microsoft.Network/networkInterfaces",
             "name": "WebServer-01-NIC",
-            "apiVersion": "2018-10-01",
+            "apiVersion": "2019-04-01",
             "location": "[parameters('location')]",
             "tags": {},
             "properties": {
@@ -202,38 +206,38 @@
                         "name": "PublicIPConfiguration",
                         "properties": {
                             "subnet": {
-                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', 'production-vnet', 'web')]"
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', 'production-vnet', 'WebSubnet')]"
                             },
                             "privateIPAllocationMethod": "Dynamic",
-                            "publicIpAddress": {
-                                "id": "[resourceId(resourceGroup().name, 'Microsoft.Network/publicIpAddresses', 'WebServer-01-IP')]"
+                            "publicIPAddress": {
+                                "id": "[resourceId(resourceGroup().name, 'Microsoft.Network/publicIPAddresses', 'WebServer-01-IP')]"
                             }
                         }
                     }
                 ]
             },
             "dependsOn": [
-                "[concat('Microsoft.Network/publicIpAddresses/', 'WebServer-01-IP')]",
+                "[concat('Microsoft.Network/publicIPAddresses/', 'WebServer-01-IP')]",
                 "[concat('Microsoft.Network/virtualNetworks/', 'production-vnet')]"
             ]
         },
         {
-            "type": "Microsoft.Network/publicIpAddresses",
+            "type": "Microsoft.Network/publicIPAddresses",
+            "name": "WebServer-01-IP",
+            "apiVersion": "2019-04-01",
+            "location": "[parameters('location')]",
+            "tags": {},
             "sku": {
                 "name": "Basic"
             },
-            "name": "WebServer-01-IP",
-            "apiVersion": "2018-08-01",
-            "location": "[parameters('location')]",
-            "tags": {},
             "properties": {
-                "publicIpAllocationMethod": "Dynamic"
+                "publicIPAllocationMethod": "Dynamic"
             }
         },
         {
             "type": "Microsoft.Compute/virtualMachines",
             "name": "WebServer-01",
-            "apiVersion": "2018-06-01",
+            "apiVersion": "2018-10-01",
             "location": "[parameters('location')]",
             "tags": {},
             "properties": {
@@ -242,7 +246,7 @@
                 },
                 "storageProfile": {
                     "osDisk": {
-                        "createOption": "fromImage",
+                        "createOption": "FromImage",
                         "managedDisk": {
                             "storageAccountType": "StandardSSD_LRS"
                         },
@@ -279,7 +283,7 @@
         {
             "type": "Microsoft.DevTestLab/schedules",
             "name": "[concat('shutdown-computevm-', 'WebServer-01')]",
-            "apiVersion": "2017-04-26-preview",
+            "apiVersion": "2018-09-15",
             "location": "[parameters('location')]",
             "tags": {},
             "properties": {
@@ -301,18 +305,22 @@
             ]
         },
         {
-            "apiVersion": "2018-06-01",
             "type": "Microsoft.Compute/virtualMachines/extensions",
+            "apiVersion": "2019-03-01",
             "name": "[concat('WebServer-01','/', 'InstallWebServer')]",
             "location": "[parameters('location')]",
             "properties": {
                 "publisher": "Microsoft.Powershell",
                 "type": "DSC",
-                "typeHandlerVersion": "2.1",
+                "typeHandlerVersion": "2.77",
                 "autoUpgradeMinorVersion":true,
                 "settings": {
-                    "ModulesURL": "https://raw.githubusercontent.com/neilhamshaw/azure-security-workshop/master/resources/dsc-iis-website.ps1.zip",
-                    "configurationFunction": "dsc-iis-website.ps1\\IIS-WebServerConfig"
+                    "wmfVersion": "latest",
+                    "configuration": {
+                        "url": "https://raw.githubusercontent.com/neilhamshaw/azure-security-workshop/master/resources/dsc-iis-website.ps1.zip",
+                        "script": "dsc-iis-website.ps1",
+                        "function": "IIS-WebServerConfig"
+                    }
                 }
             },
             "dependsOn": [
@@ -322,7 +330,7 @@
         {
             "type": "Microsoft.Network/networkInterfaces",
             "name": "SQLServer-NIC",
-            "apiVersion": "2018-10-01",
+            "apiVersion": "2019-04-01",
             "location": "[parameters('location')]",
             "properties": {
                 "ipConfigurations": [
@@ -330,7 +338,7 @@
                         "name": "PrivateIPConfiguration",
                         "properties": {
                             "subnet": {
-                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', 'production-vnet', 'database')]"
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', 'production-vnet', 'DatabaseSubnet')]"
                             },
                             "privateIPAllocationMethod": "Dynamic"
                         }
@@ -344,7 +352,7 @@
         { 
             "type": "Microsoft.Compute/virtualMachines",
             "name": "SQLServer",
-            "apiVersion": "2018-06-01",
+            "apiVersion": "2018-10-01",
             "location": "[parameters('location')]",
             "properties": {
                 "osProfile": {
@@ -376,7 +384,7 @@
                         {
                             "createOption": "Empty",
                             "lun": 0,
-                            "diskSizeGB": "1023",
+                            "diskSizeGB": 1023,
                             "caching": "ReadOnly",
                             "managedDisk": {
                                 "storageAccountType": "StandardSSD_LRS"
@@ -441,7 +449,7 @@
         {
             "type": "Microsoft.DevTestLab/schedules",
             "name": "[concat('shutdown-computevm-', 'SQLServer')]",
-            "apiVersion": "2017-04-26-preview",
+            "apiVersion": "2018-09-15",
             "location": "[parameters('location')]",
             "properties": {
                 "status": "Enabled",
@@ -461,8 +469,8 @@
             ]
         },
         {
-            "apiVersion": "2018-06-01",
             "type": "Microsoft.Compute/virtualMachines/extensions",
+            "apiVersion": "2019-03-01",
             "name": "[concat('SQLServer','/', 'SQLServerDSC')]",
             "location": "[parameters('location')]",
             "properties": {
@@ -471,8 +479,12 @@
                 "typeHandlerVersion": "2.77",
                 "autoUpgradeMinorVersion":true,
                 "settings": {
-                    "ModulesURL": "https://raw.githubusercontent.com/neilhamshaw/azure-security-workshop/master/resources/enableicmp.ps1.zip",
-                    "configurationFunction": "enableicmp.ps1\\EnableICMP"
+                    "wmfVersion": "latest",
+                    "configuration": {
+                        "url": "https://raw.githubusercontent.com/neilhamshaw/azure-security-workshop/master/resources/enableicmp.ps1.zip",
+                        "script": "enableicmp.ps1",
+                        "function": "EnableICMP"
+                    }
                 }
             },
             "dependsOn": [
@@ -482,11 +494,11 @@
     ],
     "outputs": {
         "JumpBoxAdminUsername": {
-            "type": "String",
+            "type": "string",
             "value": "remoteadmin"
         },
         "WebAdminUsername": {
-            "type": "String",
+            "type": "string",
             "value": "webadmin"
         },
         "SQLAdminUsername": {
