@@ -16,7 +16,7 @@
         {
             "type": "Microsoft.Network/networkInterfaces",
             "name": "WebServer-xx-NIC",
-            "apiVersion": "2018-10-01",
+            "apiVersion": "2019-04-01",
             "location": "[parameters('location')]",
             "tags": {},
             "properties": {
@@ -28,26 +28,26 @@
                                 "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', 'production-vnet', 'WebSubnet')]"
                             },
                             "privateIPAllocationMethod": "Dynamic",
-                            "publicIpAddress": {
-                                "id": "[resourceId(resourceGroup().name, 'Microsoft.Network/publicIpAddresses', 'WebServer-xx-IP')]"
+                            "publicIPAddress": {
+                                "id": "[resourceId(resourceGroup().name, 'Microsoft.Network/publicIPAddresses', 'WebServer-xx-IP')]"
                             }
                         }
                     }
                 ]
             },
             "dependsOn": [
-                "[concat('Microsoft.Network/publicIpAddresses/', 'WebServer-xx-IP')]"
+                "[concat('Microsoft.Network/publicIPAddresses/', 'WebServer-xx-IP')]"
             ]
         },
         {
             "type": "Microsoft.Network/publicIPAddresses",
+            "name": "WebServer-xx-IP",
+            "apiVersion": "2019-04-01",
+            "location": "[parameters('location')]",
+            "tags": {},
             "sku": {
                 "name": "Basic"
             },
-            "name": "WebServer-xx-IP",
-            "apiVersion": "2018-08-01",
-            "location": "[parameters('location')]",
-            "tags": {},
             "properties": {
                 "publicIPAllocationMethod": "Dynamic"
             }
