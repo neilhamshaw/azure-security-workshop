@@ -30,10 +30,7 @@
                         }
                     }
                 ]
-            },
-            "dependsOn": [
-                "[concat('Microsoft.Network/virtualNetworks/', 'production-vnet')]"
-            ]
+            }
         },
         { 
             "type": "Microsoft.Compute/virtualMachines",
