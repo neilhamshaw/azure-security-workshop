@@ -29,19 +29,31 @@
                 },
                 "subnets": [
                     {
-                        "name": "web",
+                        "name": "WebSubnet",
                         "properties": {
                             "addressPrefix": "10.0.1.0/24"
                         }
                     },
                     {
-                        "name": "database",
+                        "name": "APISubnet",
                         "properties": {
                             "addressPrefix": "10.0.2.0/24"
                         }
                     },
                     {
-                        "name": "management",
+                        "name": "DatabaseSubnet",
+                        "properties": {
+                            "addressPrefix": "10.0.3.0/24"
+                        }
+                    },
+                    {
+                        "name": "AppGatewaySubnet",
+                        "properties": {
+                            "addressPrefix": "10.0.4.0/24"
+                        }
+                    },
+                    {
+                        "name": "Management",
                         "properties": {
                             "addressPrefix": "10.0.0.128/25"
                         }
