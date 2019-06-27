@@ -25,7 +25,7 @@
                         "name": "PublicIPConfiguration",
                         "properties": {
                             "subnet": {
-                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', 'production-vnet', 'web')]"
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', 'production-vnet', 'WebSubnet')]"
                             },
                             "privateIPAllocationMethod": "Dynamic",
                             "publicIpAddress": {
@@ -40,7 +40,7 @@
             ]
         },
         {
-            "type": "Microsoft.Network/publicIpAddresses",
+            "type": "Microsoft.Network/publicIPAddresses",
             "sku": {
                 "name": "Basic"
             },
@@ -49,7 +49,7 @@
             "location": "[parameters('location')]",
             "tags": {},
             "properties": {
-                "publicIpAllocationMethod": "Dynamic"
+                "publicIPAllocationMethod": "Dynamic"
             }
         },
         {
@@ -64,7 +64,7 @@
                 },
                 "storageProfile": {
                     "osDisk": {
-                        "createOption": "fromImage",
+                        "createOption": "FromImage",
                         "managedDisk": {
                             "storageAccountType": "StandardSSD_LRS"
                         },
@@ -144,7 +144,7 @@
     ],
     "outputs": {
         "adminUsername": {
-            "type": "String",
+            "type": "string",
             "value": "remoteadmin"
         }
     }
