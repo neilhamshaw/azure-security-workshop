@@ -62,6 +62,19 @@
             }
         },
         {
+            "type": "Microsoft.Network/publicIPAddresses",
+            "name": "JumpBox-IP",
+            "apiVersion": "2019-04-01",
+            "location": "[parameters('location')]",
+            "tags": {},
+            "sku": {
+                "name": "Basic"
+            },
+            "properties": {
+                "publicIPAllocationMethod": "Dynamic"
+            }
+        },
+        {
             "type": "Microsoft.Network/networkInterfaces",
             "name": "JumpBox-NIC",
             "apiVersion": "2019-04-01",
@@ -87,19 +100,6 @@
                 "[concat('Microsoft.Network/publicIPAddresses/', 'JumpBox-IP')]",
                 "[concat('Microsoft.Network/virtualNetworks/', 'production-vnet')]"
             ]
-        },
-        {
-            "type": "Microsoft.Network/publicIPAddresses",
-            "name": "JumpBox-IP",
-            "apiVersion": "2019-04-01",
-            "location": "[parameters('location')]",
-            "tags": {},
-            "sku": {
-                "name": "Basic"
-            },
-            "properties": {
-                "publicIPAllocationMethod": "Dynamic"
-            }
         },
         {
             "type": "Microsoft.Compute/virtualMachines",
@@ -195,6 +195,19 @@
             ]
         },
         {
+            "type": "Microsoft.Network/publicIPAddresses",
+            "name": "WebServer-01-IP",
+            "apiVersion": "2019-04-01",
+            "location": "[parameters('location')]",
+            "tags": {},
+            "sku": {
+                "name": "Basic"
+            },
+            "properties": {
+                "publicIPAllocationMethod": "Dynamic"
+            }
+        },
+        {
             "type": "Microsoft.Network/networkInterfaces",
             "name": "WebServer-01-NIC",
             "apiVersion": "2019-04-01",
@@ -208,7 +221,8 @@
                             "subnet": {
                                 "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', 'production-vnet', 'WebSubnet')]"
                             },
-                            "privateIPAllocationMethod": "Dynamic",
+                            "privateIPAllocationMethod": "Static",
+                            "privateIPAddress": "10.0.1.5",
                             "publicIPAddress": {
                                 "id": "[resourceId(resourceGroup().name, 'Microsoft.Network/publicIPAddresses', 'WebServer-01-IP')]"
                             }
@@ -220,19 +234,6 @@
                 "[concat('Microsoft.Network/publicIPAddresses/', 'WebServer-01-IP')]",
                 "[concat('Microsoft.Network/virtualNetworks/', 'production-vnet')]"
             ]
-        },
-        {
-            "type": "Microsoft.Network/publicIPAddresses",
-            "name": "WebServer-01-IP",
-            "apiVersion": "2019-04-01",
-            "location": "[parameters('location')]",
-            "tags": {},
-            "sku": {
-                "name": "Basic"
-            },
-            "properties": {
-                "publicIPAllocationMethod": "Dynamic"
-            }
         },
         {
             "type": "Microsoft.Compute/virtualMachines",
@@ -325,6 +326,123 @@
             },
             "dependsOn": [
                 "[concat('Microsoft.Compute/virtualMachines/', 'WebServer-01')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Network/networkInterfaces",
+            "name": "APIServer-NIC",
+            "apiVersion": "2019-04-01",
+            "location": "[parameters('location')]",
+            "tags": {},
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "PublicIPConfiguration",
+                        "properties": {
+                            "subnet": {
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', 'production-vnet', 'APISubnet')]"
+                            },
+                            "privateIPAllocationMethod": "Static",
+                            "privateIPAddress": "10.0.2.4"
+                        }
+                    }
+                ]
+            },
+            "dependsOn": [
+                "[concat('Microsoft.Network/virtualNetworks/', 'production-vnet')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Compute/virtualMachines",
+            "name": "APIServer",
+            "apiVersion": "2018-10-01",
+            "location": "[parameters('location')]",
+            "tags": {},
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "Standard_B1ms"
+                },
+                "storageProfile": {
+                    "osDisk": {
+                        "createOption": "FromImage",
+                        "managedDisk": {
+                            "storageAccountType": "StandardSSD_LRS"
+                        },
+                        "name": "APIServer-OSDisk"
+                    },
+                    "imageReference": {
+                        "publisher": "MicrosoftWindowsServer",
+                        "offer": "WindowsServer",
+                        "sku": "2016-Datacenter",
+                        "version": "latest"
+                    }
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', 'APIServer-NIC')]"
+                        }
+                    ]
+                },
+                "osProfile": {
+                    "computerName": "APIServer",
+                    "adminUsername": "apiadmin",
+                    "adminPassword": "P4ssw0rd456*",
+                    "windowsConfiguration": {
+                        "enableAutomaticUpdates": true,
+                        "provisionVmAgent": true
+                    }
+                }
+            },
+            "dependsOn": [
+                "[concat('Microsoft.Network/networkInterfaces/', 'APIServer-NIC')]"
+            ]
+        },
+        {
+            "type": "Microsoft.DevTestLab/schedules",
+            "name": "[concat('shutdown-computevm-', 'APIServer')]",
+            "apiVersion": "2018-09-15",
+            "location": "[parameters('location')]",
+            "tags": {},
+            "properties": {
+                "status": "Enabled",
+                "taskType": "ComputeVmShutdownTask",
+                "dailyRecurrence": {
+                    "time": "18:30"
+                },
+                "timeZoneId": "GMT Standard Time",
+                "targetResourceId": "[resourceId('Microsoft.Compute/virtualMachines', 'APIServer')]",
+                "notificationSettings": {
+                    "status": "Disabled",
+                    "notificationLocale": "en",
+                    "timeInMinutes": "30"
+                }
+            },
+            "dependsOn": [
+                "[concat('Microsoft.Compute/virtualMachines/', 'APIServer')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Compute/virtualMachines/extensions",
+            "apiVersion": "2019-03-01",
+            "name": "[concat('APIServer','/', 'InstallWebAPI')]",
+            "location": "[parameters('location')]",
+            "properties": {
+                "publisher": "Microsoft.Powershell",
+                "type": "DSC",
+                "typeHandlerVersion": "2.77",
+                "autoUpgradeMinorVersion":true,
+                "settings": {
+                    "wmfVersion": "latest",
+                    "configuration": {
+                        "url": "https://raw.githubusercontent.com/neilhamshaw/azure-security-workshop/master/resources/dsc-iis-website.ps1.zip",
+                        "script": "dsc-iis-website.ps1",
+                        "function": "IIS-WebServerConfig"
+                    }
+                }
+            },
+            "dependsOn": [
+                "[concat('Microsoft.Compute/virtualMachines/', 'APIServer')]"
             ]
         },
         {

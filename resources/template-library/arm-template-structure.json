@@ -1,0 +1,30 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "metadata": {
+        "comments": "This empty template was developed for the MTC Azure Security Workshop.",
+        "author": "Neil Hamshaw, Microsoft UK Limited."
+    },
+    "parameters": {
+        "<parameter-name>" : {
+            "type" : "<type-of-parameter-value>",
+            "defaultValue": "<default-value-of-parameter>",
+            "allowedValues": ["<array-of-allowed-values>"],
+            "minValue": <minimum-value-for-int>,
+            "maxValue": <maximum-value-for-int>,
+            "minLength": <minimum-length-for-string-or-array>,
+            "maxLength": <maximum-length-for-string-or-array-parameters>,
+            "metadata": {
+                "description": "<description-of-the parameter>" 
+            }
+        }
+    },
+    "variables": {
+    },
+    "functions": [
+    ],
+    "resources": [
+    ],
+    "outputs": {
+    }
+  }
