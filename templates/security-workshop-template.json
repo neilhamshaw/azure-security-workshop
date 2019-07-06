@@ -344,7 +344,7 @@
                     },
                     "configurationArguments": {
                         "WebEnvironment": "[parameters('webEnvironment')]",
-                        "APIHostName": "[reference('APIServer-NIC', '2019.04.01').ipConfigurations.privateIPAddress]",
+                        "APIHostName": "[reference('APIServer-NIC', '2019-04-01').ipConfigurations.privateIPAddress]",
                         "APIPortNumber": "[parameters('apiPortNumber')]"
                     }
                 }
