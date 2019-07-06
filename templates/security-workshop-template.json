@@ -12,6 +12,26 @@
             "metadata": {
                 "description": "Location for all workshop resources."
             }
+        },
+        "webEnvironment": {
+            "type": "string",
+            "allowedValues": [
+                "Production",
+                "Development"
+            ],
+            "defaultValue": "Development",
+            "metadata": {
+                "description": "Environment for the web application deployment." 
+            }
+        },
+        "apiPortNumber": {
+            "type": "int",
+            "minValue": 1,
+            "maxValue": 65535,
+            "defaultValue": 49229,
+            "metadata": {
+                "description": "Port number to use for the web API service."
+            }
         }
     },
     "variables": {},
@@ -321,11 +341,17 @@
                         "url": "https://raw.githubusercontent.com/neilhamshaw/azure-security-workshop/master/resources/dsc-iis-website.ps1.zip",
                         "script": "dsc-iis-website.ps1",
                         "function": "IIS-WebServerConfig"
+                    },
+                    "configurationArguments": {
+                        "WebEnvironment": "[parameters('webEnvironment')]",
+                        "APIHostName": "[reference('APIServer-NIC', '2019.04.01').ipConfigurations.privateIPAddress]",
+                        "APIPortNumber": "[parameters('apiPortNumber')]"
                     }
                 }
             },
             "dependsOn": [
-                "[concat('Microsoft.Compute/virtualMachines/', 'WebServer-01')]"
+                "[concat('Microsoft.Compute/virtualMachines/', 'WebServer-01')]",
+                "[concat('Microsoft.Network/networkInterfaces', 'APIServer-NIC')]"
             ]
         },
         {
@@ -435,9 +461,13 @@
                 "settings": {
                     "wmfVersion": "latest",
                     "configuration": {
-                        "url": "https://raw.githubusercontent.com/neilhamshaw/azure-security-workshop/master/resources/dsc-iis-website.ps1.zip",
-                        "script": "dsc-iis-website.ps1",
-                        "function": "IIS-WebServerConfig"
+                        "url": "https://raw.githubusercontent.com/neilhamshaw/azure-security-workshop/master/resources/dsc-iis-api.ps1.zip",
+                        "script": "dsc-iis-api.ps1",
+                        "function": "IIS-APIServerConfig"
+                    },
+                    "configurationArguments": {
+                        "WebEnvironment": "[parameters('webEnvironment')]",
+                        "APIPortNumber": "[parameters('apiPortNumber')]"
                     }
                 }
             },

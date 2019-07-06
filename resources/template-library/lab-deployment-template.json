@@ -25,14 +25,6 @@
                 "description": "The platform environment. Used for tagging purposes etc." 
             }
         },
-        "vnetAddressSpace": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 18,
-            "metadata": {
-                "description": "The IPv4 CIDR Address Space for the VNet."
-            }
-        },
         "debugMode": {
             "type": "bool",
             "defaultValue": "false",
@@ -47,37 +39,147 @@
             "metadata": {
                 "description": "Appends resources with index value for rapid prototyping."
             }
+        },
+        "vnetAddressSpace": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 18,
+            "metadata": {
+                "description": "The IPv4 CIDR Address Space for the VNet."
+            }
         }
     },
     "variables": {
-        "vnetName": "[concat(toLower(parameters('environment')), '-vnet')]"
     },
     "resources": [
         {
-            "type": "Microsoft.Network/virtualNetworks",
-            "apiVersion": "2019-04-01",
-            "name": "[variables('vnetName')]",
+            "type": "Microsoft.Resources/deployments",
+            "comments": "Deploys the workshop working VNet",
+            "apiVersion": "2019-05-01",
+            "name": "vnetDeployment",
             "location": "[parameters('location')]",
-            "properties": {
-                "addressSpace": {
-                    "addressPrefixes": [
-                        "[parameters('vnetAddressSpace')]"
-                    ]
+            "properties":{
+                "templateLink": {
+                    "uri": "vnet-template.json"
+                },
+                "parameters": {
+                    "location": "[parameters('location')]",
+                    "environment": "[parameters('environment')]",
+                    "debugMode": "[parameters('debugMode')]",
+                    "index": "[parameters('index')]",
+                    "vnetAddressSpace": "[parameters('vnetAddressSpace')]"
                 }
-            },
-            "tags": {
-                "Environment": "[parameters('environment')]"
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "comments": "Deploys the Web Subnet to the VNet",
+            "apiVersion": "2019-05-01",
+            "name": "webSubnetDeployment",
+            "location": "[parameters('location')]",
+            "properties":{
+                "templateLink": {
+                    "uri": "subnet-template.json"
+                },
+                "parameters": {
+                    "location": "[parameters('location')]",
+                    "environment": "[parameters('environment')]",
+                    "debugMode": "[parameters('debugMode')]",
+                    "index": "[parameters('index')]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "comments": "Deployment comments",
+            "apiVersion": "2019-05-01",
+            "name": "",
+            "location": "[parameters('location')]",
+            "properties":{
+                "templateLink": {
+                    "uri": ""
+                },
+                "parameters": {
+                    "location": "[parameters('location')]",
+                    "environment": "[parameters('environment')]",
+                    "debugMode": "[parameters('debugMode')]",
+                    "index": "[parameters('index')]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "comments": "Deployment comments",
+            "apiVersion": "2019-05-01",
+            "name": "",
+            "location": "[parameters('location')]",
+            "properties":{
+                "templateLink": {
+                    "uri": ""
+                },
+                "parameters": {
+                    "location": "[parameters('location')]",
+                    "environment": "[parameters('environment')]",
+                    "debugMode": "[parameters('debugMode')]",
+                    "index": "[parameters('index')]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "comments": "Deployment comments",
+            "apiVersion": "2019-05-01",
+            "name": "",
+            "location": "[parameters('location')]",
+            "properties":{
+                "templateLink": {
+                    "uri": ""
+                },
+                "parameters": {
+                    "location": "[parameters('location')]",
+                    "environment": "[parameters('environment')]",
+                    "debugMode": "[parameters('debugMode')]",
+                    "index": "[parameters('index')]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "comments": "Deployment comments",
+            "apiVersion": "2019-05-01",
+            "name": "",
+            "location": "[parameters('location')]",
+            "properties":{
+                "templateLink": {
+                    "uri": ""
+                },
+                "parameters": {
+                    "location": "[parameters('location')]",
+                    "environment": "[parameters('environment')]",
+                    "debugMode": "[parameters('debugMode')]",
+                    "index": "[parameters('index')]"
+                }
+            }
+        }
+        {
+            "type": "Microsoft.Resources/deployments",
+            "comments": "Deployment comments",
+            "apiVersion": "2019-05-01",
+            "name": "",
+            "location": "[parameters('location')]",
+            "properties":{
+                "templateLink": {
+                    "uri": ""
+                },
+                "parameters": {
+                    "location": "[parameters('location')]",
+                    "environment": "[parameters('environment')]",
+                    "debugMode": "[parameters('debugMode')]",
+                    "index": "[parameters('index')]"
+                }
             }
         }
     ],
     "outputs": {
-        "vnetName": {
-            "type": "string",
-            "value": "[variables('vnetName')]"
-        },
-        "vnetObject": {
-            "type": "object",
-            "value": "[reference(variables('vnetName'), '2019-04-01', 'Full')]"
-        }
     }
 }
