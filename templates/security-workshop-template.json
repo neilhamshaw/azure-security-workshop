@@ -351,7 +351,7 @@
             },
             "dependsOn": [
                 "[concat('Microsoft.Compute/virtualMachines/', 'WebServer-01')]",
-                "[concat('Microsoft.Network/networkInterfaces', 'APIServer-NIC')]"
+                "[concat('Microsoft.Network/networkInterfaces/', 'APIServer-NIC')]"
             ]
         },
         {
