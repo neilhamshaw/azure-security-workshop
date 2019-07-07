@@ -16,7 +16,8 @@
         "webEnvironment": {
             "type": "string",
             "allowedValues": [
-                "Production",
+                "Production.A",
+                "Production.B",
                 "Development"
             ],
             "defaultValue": "Development",
