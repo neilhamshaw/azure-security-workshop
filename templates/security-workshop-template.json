@@ -344,14 +344,13 @@
                     },
                     "configurationArguments": {
                         "WebEnvironment": "[parameters('webEnvironment')]",
-                        "APIHostName": "[reference('APIServer-NIC', '2019-04-01').ipConfigurations[0].privateIpAddress]",
+                        "APIHostName": "10.0.2.4",
                         "APIPortNumber": "[parameters('apiPortNumber')]"
                     }
                 }
             },
             "dependsOn": [
-                "[concat('Microsoft.Compute/virtualMachines/', 'WebServer-01')]",
-                "[concat('Microsoft.Network/networkInterfaces/', 'APIServer-NIC')]"
+                "[concat('Microsoft.Compute/virtualMachines/', 'WebServer-01')]"
             ]
         },
         {
