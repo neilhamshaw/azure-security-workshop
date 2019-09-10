@@ -8,37 +8,32 @@
             "metadata": {
                 "description": "Location for all workshop resources."
             }
+        },
+        "webEnvironment": {
+            "type": "string",
+            "allowedValues": [
+                "Production.A",
+                "Production.B",
+                "Development"
+            ],
+            "defaultValue": "Development",
+            "metadata": {
+                "description": "Environment for the web application deployment." 
+            }
+        },
+        "apiPortNumber": {
+            "type": "int",
+            "minValue": 1,
+            "maxValue": 65535,
+            "defaultValue": 49229,
+            "metadata": {
+                "description": "Port number to use for the web API service."
+            }
         }
     },
     "variables": {
     },
     "resources": [
-        {
-            "type": "Microsoft.Network/networkInterfaces",
-            "name": "WebServer-xx-NIC",
-            "apiVersion": "2019-04-01",
-            "location": "[parameters('location')]",
-            "tags": {},
-            "properties": {
-                "ipConfigurations": [
-                    {
-                        "name": "PublicIPConfiguration",
-                        "properties": {
-                            "subnet": {
-                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', 'production-vnet', 'WebSubnet')]"
-                            },
-                            "privateIPAllocationMethod": "Dynamic",
-                            "publicIPAddress": {
-                                "id": "[resourceId(resourceGroup().name, 'Microsoft.Network/publicIPAddresses', 'WebServer-xx-IP')]"
-                            }
-                        }
-                    }
-                ]
-            },
-            "dependsOn": [
-                "[concat('Microsoft.Network/publicIPAddresses/', 'WebServer-xx-IP')]"
-            ]
-        },
         {
             "type": "Microsoft.Network/publicIPAddresses",
             "name": "WebServer-xx-IP",
@@ -53,9 +48,36 @@
             }
         },
         {
+            "type": "Microsoft.Network/networkInterfaces",
+            "name": "WebServer-xx-NIC",
+            "apiVersion": "2019-04-01",
+            "location": "[parameters('location')]",
+            "tags": {},
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "PublicIPConfiguration",
+                        "properties": {
+                            "subnet": {
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', 'production-vnet', 'WebSubnet')]"
+                            },
+                            "privateIPAllocationMethod": "Static",
+                            "privateIPAddress": "10.0.1.10",
+                            "publicIPAddress": {
+                                "id": "[resourceId(resourceGroup().name, 'Microsoft.Network/publicIPAddresses', 'WebServer-xx-IP')]"
+                            }
+                        }
+                    }
+                ]
+            },
+            "dependsOn": [
+                "[concat('Microsoft.Network/publicIPAddresses/', 'WebServer-xx-IP')]"
+            ]
+        },
+        {
             "type": "Microsoft.Compute/virtualMachines",
             "name": "WebServer-xx",
-            "apiVersion": "2018-06-01",
+            "apiVersion": "2018-10-01",
             "location": "[parameters('location')]",
             "tags": {},
             "properties": {
@@ -86,8 +108,8 @@
                 },
                 "osProfile": {
                     "computerName": "WebServer-xx",
-                    "adminUsername": "remoteadmin",
-                    "adminPassword": "P4ssw0rd123",
+                    "adminUsername": "webadmin",
+                    "adminPassword": "P4ssw0rd123*",
                     "windowsConfiguration": {
                         "enableAutomaticUpdates": true,
                         "provisionVmAgent": true
@@ -101,16 +123,16 @@
         {
             "type": "Microsoft.DevTestLab/schedules",
             "name": "[concat('shutdown-computevm-', 'WebServer-xx')]",
-            "apiVersion": "2017-04-26-preview",
+            "apiVersion": "2018-09-15",
             "location": "[parameters('location')]",
             "tags": {},
             "properties": {
-                "status": "Disabled",
+                "status": "Enabled",
                 "taskType": "ComputeVmShutdownTask",
                 "dailyRecurrence": {
                     "time": "18:30"
                 },
-                "timeZoneId": "UTC",
+                "timeZoneId": "GMT Standard Time",
                 "targetResourceId": "[resourceId('Microsoft.Compute/virtualMachines', 'WebServer-xx')]",
                 "notificationSettings": {
                     "status": "Disabled",
@@ -123,8 +145,8 @@
             ]
         },
         {
-            "apiVersion": "2018-06-01",
             "type": "Microsoft.Compute/virtualMachines/extensions",
+            "apiVersion": "2019-03-01",
             "name": "[concat('WebServer-xx','/', 'InstallWebServer')]",
             "location": "[parameters('location')]",
             "properties": {
@@ -133,8 +155,17 @@
                 "typeHandlerVersion": "2.77",
                 "autoUpgradeMinorVersion":true,
                 "settings": {
-                    "ModulesURL": "https://raw.githubusercontent.com/neilhamshaw/azure-security-workshop/master/resources/dsc-iis-website.ps1.zip",
-                    "configurationFunction": "dsc-iis-website.ps1\\IIS-WebServerConfig"
+                    "wmfVersion": "latest",
+                    "configuration": {
+                        "url": "https://raw.githubusercontent.com/neilhamshaw/azure-security-workshop/master/resources/dsc-iis-website.ps1.zip",
+                        "script": "dsc-iis-website.ps1",
+                        "function": "IIS-WebServerConfig"
+                    },
+                    "configurationArguments": {
+                        "WebEnvironment": "[parameters('webEnvironment')]",
+                        "APIHostName": "10.0.2.4",
+                        "APIPortNumber": "[parameters('apiPortNumber')]"
+                    }
                 }
             },
             "dependsOn": [
